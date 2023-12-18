@@ -34,7 +34,7 @@ const editUser = (req, res, next) => {
     { name, email },
     { new: 'true', runValidators: true }
   )
-    .orFail(new Error('NotFound'))
+    .orFail(new NotFoundError(`Пользователь не найден.`))
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.code === 11000) {

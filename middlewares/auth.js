@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    next(new UnauthorizedError('Авторизуйся!'));
+    next(new UnauthorizedError('увожаемый кинозритель, авторизуйтесь'));
     return;
   }
 
@@ -20,7 +20,7 @@ module.exports = (req, res, next) => {
       NODE_ENV === 'production' ? JWT_SECRET : 'MY-MEGA-SECRET-KEY'
     );
   } catch (err) {
-    next(new UnauthorizedError('Авторизуйся!'));
+    next(new UnauthorizedError('увожаемый кинозритель, авторизуйтесь'));
   }
 
   req.user = payload;
