@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const User = require('../models/user');
 
 // vars
-const { NODE_ENV, JWT_SECRET = 'MY-MEGA-SECRET-KEY' } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
@@ -22,7 +22,7 @@ const ConflictError = require('../errors/ConflictError');
 
 const getUser = (req, res, next) => {
   User.findById(req.user._id)
-    .then((users) => res.status(200).send(users))
+    .then((user) => res.status(200).send(user))
     .catch(next);
 };
 
@@ -82,9 +82,13 @@ const login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then(({ _id }) => {
-      const token = jwt.sign({ _id }, JWT_SECRET, {
-        expiresIn: '30d',
-      });
+      const token = jwt.sign(
+        { _id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'MY-MEGA-SECRET-KEY',
+        {
+          expiresIn: '30d',
+        }
+      );
       res.send({ token });
     })
     .catch(next);
