@@ -65,7 +65,7 @@ const delMovie = async (req, res, next) => {
     if (!movie.owner.equals(_id)) {
       next(new ForbiddenError('Чужая кинолента'));
     } else {
-      Movie.deleteOne(movie);
+      await Movie.deleteOne(movie);
       res.status(200).send({ message: 'Кинолента удалена' });
     }
   } catch (err) {
