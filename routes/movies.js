@@ -1,7 +1,7 @@
 const { celebrate } = require('celebrate');
+const router = require('express').Router();
 const { postMovieJoi, delMovieJoi } = require('../utils/constans');
 
-const router = require('express').Router();
 const { addMovie, delMovie, getMovies } = require('../controllers/movies');
 
 router.get('/', getMovies);

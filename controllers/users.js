@@ -11,7 +11,7 @@ const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ConflictError = require('../errors/ConflictError');
 
-const getUser = async (req, res, next) => {
+const getUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => res.status(200).send(user))
     .catch(next);
@@ -24,13 +24,12 @@ const editUser = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { name, email },
-      { new: 'true', runValidators: true }
+      { new: 'true', runValidators: true },
     );
-    if (user) {
-      return res.status(200).send(user);
+    if (!user) {
+      next(new NotFoundError('Пользователь не найден.'));
     } else {
-      next(new NotFoundError(`Пользователь не найден.`));
-      return;
+      return res.status(200).send(user);
     }
   } catch (err) {
     if (err.code === 11000) {
@@ -38,11 +37,12 @@ const editUser = async (req, res, next) => {
     } else if (err instanceof mongoose.Error.ValidationError) {
       next(new BadRequestError(err.message));
     } else if (err instanceof mongoose.Error.DocumentNotFoundError) {
-      next(new NotFoundError(`Пользователь не найден.`));
+      next(new NotFoundError('Пользователь не найден.'));
     } else {
       next(err);
     }
   }
+  return null;
 };
 
 const addUser = async (req, res, next) => {
@@ -82,11 +82,16 @@ const login = (req, res, next) => {
         NODE_ENV === 'production' ? JWT_SECRET : 'MY-MEGA-SECRET-KEY',
         {
           expiresIn: '30d',
-        }
+        },
       );
       res.send({ token });
     })
     .catch(next);
 };
 
-module.exports = { getUser, editUser, addUser, login };
+module.exports = {
+  getUser,
+  editUser,
+  addUser,
+  login,
+};

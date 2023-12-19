@@ -1,12 +1,12 @@
 const { Joi } = require('celebrate');
 const rateLimit = require('express-rate-limit');
 
-const urlReg =
-  /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
+// regs
+const urlReg = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
 
-const mailReg =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const mailReg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+// user validation
 const editUserJoi = {
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
@@ -29,6 +29,7 @@ const signupUserJoi = {
   }),
 };
 
+// movie validation
 const postMovieJoi = {
   body: Joi.object().keys({
     country: Joi.string().required(),
@@ -51,6 +52,7 @@ const delMovieJoi = {
   }),
 };
 
+// the rest
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,

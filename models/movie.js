@@ -59,7 +59,7 @@ const userMovie = new mongoose.Schema(
       required: [true, 'Незаполнено поле nameEN'],
     },
   },
-  { versionKey: false }
+  { versionKey: false },
 );
 
 module.exports = mongoose.model('movie', userMovie);

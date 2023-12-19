@@ -17,7 +17,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(
       token,
-      NODE_ENV === 'production' ? JWT_SECRET : 'MY-MEGA-SECRET-KEY'
+      NODE_ENV === 'production' ? JWT_SECRET : 'MY-MEGA-SECRET-KEY',
     );
   } catch (err) {
     next(new UnauthorizedError('увожаемый кинозритель, авторизуйтесь'));
