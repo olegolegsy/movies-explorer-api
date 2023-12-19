@@ -27,7 +27,7 @@ const editUser = async (req, res, next) => {
       { new: 'true', runValidators: true },
     );
     if (!user) {
-      next(new NotFoundError('Пользователь не найден.'));
+      next(new NotFoundError('Кинозритель не найден.'));
     } else {
       return res.status(200).send(user);
     }
@@ -37,7 +37,7 @@ const editUser = async (req, res, next) => {
     } else if (err instanceof mongoose.Error.ValidationError) {
       next(new BadRequestError(err.message));
     } else if (err instanceof mongoose.Error.DocumentNotFoundError) {
-      next(new NotFoundError('Пользователь не найден.'));
+      next(new NotFoundError('Кинозритель не найден.'));
     } else {
       next(err);
     }
