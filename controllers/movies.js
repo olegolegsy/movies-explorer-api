@@ -51,7 +51,7 @@ const addMovie = async (req, res, next) => {
   }
 };
 
-const delMovie = async (req, res, next) => {
+const delMovie = (req, res, next) => {
   const { movieId } = req.params;
   const { _id } = req.user;
 
