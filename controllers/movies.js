@@ -65,8 +65,8 @@ const delMovie = async (req, res, next) => {
     if (!movie.owner.equals(_id)) {
       next(new ForbiddenError('Чужая кинолента'));
     } else {
-      await Movie.deleteOne(movie);
-      res.status(200).send({ message: 'Кинолента удалена' });
+      const delRusult = await Movie.deleteOne(movie);
+      if (delRusult) res.status(200).send({ message: 'Кинолента удалена' });
     }
   } catch (err) {
     if (err instanceof mongoose.Error.DocumentNotFoundError) {
