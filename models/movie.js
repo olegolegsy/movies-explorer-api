@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { urlReg } = require('../utils/constans');
 
 const userMovie = new mongoose.Schema(
   {
@@ -15,9 +16,7 @@ const userMovie = new mongoose.Schema(
       required: [true, 'Незаполнено поле image'],
       validate: {
         validator(url) {
-          return /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(
-            url
-          );
+          return urlReg.test(url);
         },
         message: 'Введите URL в поле image',
       },
@@ -27,9 +26,7 @@ const userMovie = new mongoose.Schema(
       required: [true, 'Незаполнено поле trailerLink'],
       validate: {
         validator(url) {
-          return /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(
-            url
-          );
+          return urlReg.test(url);
         },
         message: 'Введите URL в поле trailerLink',
       },
@@ -39,9 +36,7 @@ const userMovie = new mongoose.Schema(
       required: [true, 'Незаполнено поле thumbnail'],
       validate: {
         validator(url) {
-          return /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(
-            url
-          );
+          return urlReg.test(url);
         },
         message: 'Введите URL в поле thumbnail',
       },

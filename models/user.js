@@ -1,11 +1,6 @@
-// разкомментить строчки с ошибками после добавления их
-
-// email - обязательное поле, уникальное, валидация
-// password - обязательное поле, строка, БЗ по умолчанию не возвращает данное поле
-// name - обязательная строка, 2-30 символов
-
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const { mailReg } = require('../utils/constans');
 const { UnauthorizedError } = require('../errors/UnauthorizedError');
 
 const userSchema = new mongoose.Schema(
@@ -22,9 +17,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       validate: {
         validator(mail) {
-          return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-            mail
-          );
+          return mailReg.test(mail);
         },
         message: 'Введите email',
       },

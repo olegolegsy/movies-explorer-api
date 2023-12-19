@@ -4,7 +4,7 @@ const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
 
-const addMovie = (req, res, next) => {
+const addMovie = async (req, res, next) => {
   const { _id } = req.user;
   const {
     country,
@@ -20,28 +20,29 @@ const addMovie = (req, res, next) => {
     nameEN,
   } = req.body;
 
-  Movie.create({
-    country,
-    director,
-    duration,
-    description,
-    year,
-    image,
-    trailerLink,
-    thumbnail,
-    movieId,
-    nameRU,
-    nameEN,
-    owner: _id,
-  })
-    .then((movie) => res.status(201).send(movie))
-    .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        next(new BadRequestError(err.message));
-      } else {
-        next(err);
-      }
+  try {
+    const movie = await Movie.create({
+      country,
+      director,
+      duration,
+      description,
+      year,
+      image,
+      trailerLink,
+      thumbnail,
+      movieId,
+      nameRU,
+      nameEN,
+      owner: _id,
     });
+    res.status(201).send(movie);
+  } catch (err) {
+    if (err instanceof mongoose.Error.ValidationError) {
+      next(new BadRequestError(err.message));
+    } else {
+      next(err);
+    }
+  }
 };
 
 const getMovies = (req, res, next) => {
@@ -50,7 +51,7 @@ const getMovies = (req, res, next) => {
     .catch(next);
 };
 
-const delMovie = (req, res, next) => {
+const delMovie = async (req, res, next) => {
   const { movieId } = req.params;
   const { _id } = req.user;
 
