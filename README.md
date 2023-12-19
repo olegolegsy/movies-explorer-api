@@ -2,4 +2,4 @@
 
 дипломный проект Яндекс.Практикума (backend)
 
-https://api.olegdiplom.nomoredomainsmonster.ru/signin
+https://api.olegdiplom.nomoredomainsmonster.ru
