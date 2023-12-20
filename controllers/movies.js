@@ -55,6 +55,29 @@ const delMovie = (req, res, next) => {
   const { movieId } = req.params;
   const { _id } = req.user;
 
+  Movie.findById(movieId)
+    .orFail(new NotFoundError('Нет такой киноленты'))
+    .then((movie) => {
+      if (movie.owner.equals(_id)) {
+        Movie.deleteOne({ _id: movie._id })
+          .then(() => res.status(200).send({ message: 'Кинолента удалена' }))
+          .catch((err) => {
+            next(err);
+          });
+      } else {
+        next(new ForbiddenError('Чужая кинолента'));
+      }
+    })
+    .catch((err) => {
+      if (err instanceof mongoose.Error.DocumentNotFoundError) {
+        next(new NotFoundError('Нет такой киноленты'));
+      } else if (err instanceof mongoose.Error.CastError) {
+        next(new BadRequestError('Некорректный id киноленты'));
+      } else {
+        next(err);
+      }
+    });
+
   // try {
   //   const movie = await Movie.findById(movieId);
   //   if (!movie) {
@@ -77,29 +100,6 @@ const delMovie = (req, res, next) => {
   //     next(err);
   //   }
   // }
-
-  Movie.findById(movieId)
-    .orFail(new NotFoundError('Нет такой киноленты'))
-    .then((movie) => {
-      if (movie.owner.equals(_id)) {
-        Movie.deleteOne(movie)
-          .then(() => res.status(200).send({ message: 'Кинолента удалена' }))
-          .catch((err) => {
-            next(err);
-          });
-      } else {
-        next(new ForbiddenError('Чужая кинолента'));
-      }
-    })
-    .catch((err) => {
-      if (err instanceof mongoose.Error.DocumentNotFoundError) {
-        next(new NotFoundError('Нет такой киноленты'));
-      } else if (err instanceof mongoose.Error.CastError) {
-        next(new BadRequestError('Некорректный id киноленты'));
-      } else {
-        next(err);
-      }
-    });
 };
 
 module.exports = { addMovie, delMovie, getMovies };
