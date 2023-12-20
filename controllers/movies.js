@@ -59,7 +59,7 @@ const delMovie = (req, res, next) => {
     .orFail(new NotFoundError('Нет такой киноленты'))
     .then((movie) => {
       if (movie.owner.equals(_id)) {
-        Movie.deleteOne({ _id: movie._id })
+        Movie.remove(movie)
           .then(() => res.status(200).send({ message: 'Кинолента удалена' }))
           .catch((err) => {
             next(err);
